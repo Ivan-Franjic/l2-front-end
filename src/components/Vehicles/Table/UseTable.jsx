@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import TableStore from "../stores/TableStore";
+import { useEffect } from "react";
+import TableStore from "../../../Stores/TableStore";
 
 const calculateRange = (data, rowsPerPage) => {
   const range = [];
@@ -16,9 +16,6 @@ const sliceData = (data, page, rowsPerPage) => {
 };
 
 const useTable = (data, page, rowsPerPage) => {
-  // const [tableRange, setTableRange] = useState([]);
-  // const [slice, setSlice] = useState([]);
-
   useEffect(() => {
     const range = calculateRange(data, rowsPerPage);
     TableStore.setTableRange([...range]);
