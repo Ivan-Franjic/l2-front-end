@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Table from "../components/Table";
 import VehiclesStore from "../stores/VehiclesStore";
 import { observer } from "mobx-react";
 import "./Vehicles.css";
@@ -28,7 +29,9 @@ const Vehicles = observer(() => {
   return (
     <>
       <main className="container">
-        <div className="wrapper"></div>
+        <div className="wrapper">
+          <Table data={VehiclesStore.vehiclemakes} rowsPerPage={4} />
+        </div>
       </main>
     </>
   );
