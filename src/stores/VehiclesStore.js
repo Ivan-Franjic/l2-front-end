@@ -2,6 +2,7 @@ import { makeAutoObservable } from "mobx";
 
 class VehiclesStore {
   vehiclemakes = [];
+  vehiclemodels = [];
 
   constructor() {
     makeAutoObservable(this);
@@ -9,6 +10,10 @@ class VehiclesStore {
 
   setVehicleMakes = (vehiclemakes) => {
     this.vehiclemakes = vehiclemakes;
+  };
+
+  setVehicleModels = (vehiclemodels) => {
+    this.vehiclemodels = vehiclemodels;
   };
 }
 
