@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const useEditForm = (id, Success) => {
+const useCreateForm = (Success) => {
   const [values, setValues] = useState({
     vehiclemodel: "",
     vehiclemake: "",
@@ -13,31 +13,28 @@ const useEditForm = (id, Success) => {
       [name]: value,
     });
   };
-
   const handleSubmit = (e) => {
     e.preventDefault();
 
     let requestOptions = {};
     requestOptions = {
-      method: "PUT",
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        id: id,
         name: values.vehiclemodel,
         makeid: values.vehiclemake,
       }),
     };
 
     fetch(
-      "https://api.baasic.com/beta/l2-front-end/resources/VehicleModel/" + id,
+      "https://api.baasic.com/beta/l2-front-end/resources/VehicleModel/",
       requestOptions
     );
     Success();
   };
-
-  return { handleChange, values, handleSubmit };
+  return { handleChange, handleSubmit };
 };
 
-export default useEditForm;
+export default useCreateForm;

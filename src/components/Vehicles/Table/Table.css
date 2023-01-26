@@ -48,3 +48,23 @@
 .table__iconDelete {
   color: red;
 }
+
+.addVehicleButton {
+  cursor: pointer;
+  width: 300px;
+  height: 50px;
+  margin-bottom: 10px;
+  padding: 0 16px;
+  border-radius: 1.25rem;
+  background: #10639a;
+  color: #ebebeb;
+  border: 0;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  transition: all 0.375s;
+}
+
+.addVehicleButton:hover {
+  background: #1271b1;
+}

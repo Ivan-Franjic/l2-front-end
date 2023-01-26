@@ -4,6 +4,7 @@ import { observer } from "mobx-react";
 import "./Table.css";
 import { MdEdit } from "react-icons/md";
 import { BsFillTrashFill } from "react-icons/bs";
+import { AiOutlinePlus } from "react-icons/ai";
 import TableFooter from "./TableFooter";
 import TableStore from "../../../Stores/TableStore";
 import VehiclesStore from "../../../Stores/VehiclesStore";
@@ -38,10 +39,10 @@ const Table = ({ data }) => {
   };
 
   const url_vehiclemakes =
-    "https://api.baasic.com/beta/l2-front-end/resources/VehicleMake/";
+    "https://api.baasic.com/beta/l2-front-end/resources/VehicleMake?limit=100";
 
   const url_vehiclemodels =
-    "https://api.baasic.com/beta/l2-front-end/resources/VehicleModel/";
+    "https://api.baasic.com/beta/l2-front-end/resources/VehicleModel?limit=100";
 
   const getVehicleMakes = async () => {
     const res_vehiclemakes = await fetch(url_vehiclemakes, requestOptions);
@@ -64,6 +65,23 @@ const Table = ({ data }) => {
           : "asc",
       orderBy: accessor,
     }));
+  };
+  const handleSearch = (value, accessor) => {
+    setActivePage(1);
+
+    if (value) {
+      setFilters((prevFilters) => ({
+        ...prevFilters,
+        [accessor]: value,
+      }));
+    } else {
+      setFilters((prevFilters) => {
+        const updatedFilters = { ...prevFilters };
+        delete updatedFilters[accessor];
+
+        return updatedFilters;
+      });
+    }
   };
 
   const createVehiclesArray = () => {
@@ -88,6 +106,17 @@ const Table = ({ data }) => {
 
   return (
     <>
+      {/* <input
+        type="search"
+        placeholder={`Search`}
+        value={filters[column.accessor]}
+        onChange={(event) => handleSearch(event.target.value, column.accessor)}
+      /> */}
+
+      <Link to={"/vehicles/create"}>
+        <button className="addVehicleButton">+ Add vehicle</button>
+      </Link>
+
       <table className="table">
         <thead className="table__header">
           <tr>
