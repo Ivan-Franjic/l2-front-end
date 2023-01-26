@@ -1,27 +1,54 @@
-import React, { useEffect } from "react";
-
+import React from "react";
 import "./TableFooter.css";
+const TableFooter = ({
+  activePage,
+  count,
+  rowsPerPage,
+  totalPages,
+  setActivePage,
+}) => {
+  const beginning = activePage === 1 ? 1 : rowsPerPage * (activePage - 1) + 1;
+  const end = activePage === totalPages ? count : beginning + rowsPerPage - 1;
 
-const TableFooter = ({ range, setPage, page, slice }) => {
-  useEffect(() => {
-    if (slice.length < 1 && page !== 1) {
-      setPage(page - 1);
-    }
-  }, [slice, page, setPage]);
   return (
-    <div className="tableFooter">
-      {range.map((el, index) => (
+    <>
+      <div className="table__footer">
         <button
-          key={index}
-          className={`${"button"} ${
-            page === el ? "activeButton" : "inactiveButton"
-          }`}
-          onClick={() => setPage(el)}
+          className="table__footerButton"
+          disabled={activePage === 1}
+          onClick={() => setActivePage(1)}
         >
-          {el}
+          ⏮️
         </button>
-      ))}
-    </div>
+        <button
+          className="table__footerButton"
+          disabled={activePage === 1}
+          onClick={() => setActivePage(activePage - 1)}
+        >
+          ⬅️
+        </button>
+        <button
+          className="table__footerButton"
+          disabled={activePage === totalPages}
+          onClick={() => setActivePage(activePage + 1)}
+        >
+          ➡️
+        </button>
+        <button
+          className="table__footerButton"
+          disabled={activePage === totalPages}
+          onClick={() => setActivePage(totalPages)}
+        >
+          ⏭️
+        </button>
+      </div>
+      <p>
+        Page {activePage} of {totalPages}
+      </p>
+      <p>
+        Rows: {beginning === end ? end : `${beginning} - ${end}`} of {count}
+      </p>
+    </>
   );
 };
 

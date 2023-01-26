@@ -4,13 +4,13 @@
   width: 100%;
 }
 
-.tableRowHeader {
+.table__header {
   background-color: transparent;
   transition: all 0.25s ease;
   border-radius: 10px;
 }
 
-.tableHeader {
+.table__headerRow {
   background-color: #f1f1f1;
   padding: 12px;
   font-weight: 500;
@@ -19,24 +19,32 @@
   color: #2c3e50;
 }
 
-.tableHeader:first-child {
+.table__headerRow:first-child {
   border-top-left-radius: 15px;
 }
 
-.tableHeader:last-child {
+.table__headerRow:last-child {
   border-top-right-radius: 15px;
 }
 
-.tableRowItems {
+.table__items {
   cursor: auto;
 }
 
-.tableRowItems:nth-child(odd) {
+.table__items:nth-child(odd) {
   background-color: #f9f9f9;
 }
 
-.tableCell {
+.table__itemsCell {
   padding: 12px;
   font-size: 14px;
   color: grey;
+}
+
+.table__iconEdit {
+  color: blue;
+}
+
+.table__iconDelete {
+  color: red;
 }

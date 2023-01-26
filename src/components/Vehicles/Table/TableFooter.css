@@ -1,4 +1,4 @@
-.tableFooter {
+.table__footer {
   background-color: #f1f1f1;
   padding: 8px 0px;
   width: 100%;
@@ -13,16 +13,14 @@
   justify-content: center;
 }
 
-.button {
-  border: none;
+.table__footerButton {
   padding: 7px 14px;
-  border-radius: 10px;
   cursor: pointer;
   margin-right: 4px;
   margin-left: 4px;
 }
 
-.activeButton {
+/* .activeButton {
   color: white;
   background: #185adb;
 }
@@ -30,4 +28,4 @@
 .inactiveButton {
   color: #2c3e50;
   background: #f9f9f9;
-}
+} */
