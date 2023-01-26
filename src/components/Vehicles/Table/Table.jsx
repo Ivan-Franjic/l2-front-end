@@ -65,28 +65,11 @@ const Table = ({ data }) => {
       orderBy: accessor,
     }));
   };
-  const handleSearch = (value, accessor) => {
-    setActivePage(1);
 
-    if (value) {
-      setFilters((prevFilters) => ({
-        ...prevFilters,
-        [accessor]: value,
-      }));
-    } else {
-      setFilters((prevFilters) => {
-        const updatedFilters = { ...prevFilters };
-        delete updatedFilters[accessor];
-
-        return updatedFilters;
-      });
-    }
-  };
-
-  const createFinalArray = () => {
-    const finalArray = [];
+  const createVehiclesArray = () => {
+    const vehiclesArray = [];
     VehiclesStore.vehiclemodels.map((s1) => {
-      finalArray.push({
+      vehiclesArray.push({
         id: s1.id,
         name: VehiclesStore.vehiclemakes.find(
           (s2) => s2.id.toString() === s1.makeid
@@ -94,23 +77,17 @@ const Table = ({ data }) => {
         model: s1.name,
       });
     });
-    VehiclesStore.setVehicles(finalArray);
+    VehiclesStore.setVehicles(vehiclesArray);
   };
 
   useEffect(() => {
     getVehicleMakes();
     getVehicleModels();
-    createFinalArray();
+    createVehiclesArray();
   }, []);
 
   return (
     <>
-      {/* <input
-        type="search"
-        placeholder={`Search`}
-        value={filters[column.accessor]}
-        onChange={(event) => handleSearch(event.target.value, column.accessor)}
-      /> */}
       <table className="table">
         <thead className="table__header">
           <tr>
