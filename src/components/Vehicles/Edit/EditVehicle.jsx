@@ -9,14 +9,14 @@ export default function EditVehicle() {
   const [update, setUpdate] = useState(1);
 
   function Success() {
-    document.getElementById("login__formSubmitButton").disabled = true;
+    document.getElementById("edit__formSubmitButton").disabled = true;
     setTimeout(() => {
       document.getElementById("redirect").click();
     }, 1000);
   }
 
   function Cancel() {
-    document.getElementById("login__formCancelButton").disabled = true;
+    document.getElementById("edit__formCancelButton").disabled = true;
     document.getElementById("redirect").click();
   }
 
@@ -48,8 +48,8 @@ export default function EditVehicle() {
   return (
     <>
       <div className="edit">
-        <div className="login">
-          <form onSubmit={handleSubmit} className="login__form">
+        <div className="edit__vehicle">
+          <form onSubmit={handleSubmit} className="edit__vehicleForm">
             <label htmlFor="vehiclemake">Make</label>
             <select
               className="select"
@@ -75,7 +75,7 @@ export default function EditVehicle() {
             />
             <Link id="redirect" to="/" />
             <button
-              id="login__formSubmitButton"
+              id="edit__formSubmitButton"
               type="submit"
               color="primary"
               className="inputnc"
@@ -83,7 +83,7 @@ export default function EditVehicle() {
               Save
             </button>
             <button
-              id="login__formCancelButton"
+              id="edit__formCancelButton"
               type="submit"
               color="primary"
               className="inputonc"
