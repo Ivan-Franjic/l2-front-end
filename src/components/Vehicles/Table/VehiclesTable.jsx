@@ -9,7 +9,7 @@ import "./VehiclesTable.css";
 
 import { Link } from "react-router-dom";
 
-const Table = observer(() => {
+const VehiclesTable = observer(() => {
   const [filters, setFilters] = useState({});
   const [sort, setSort] = useState({ order: "asc", orderBy: "id" });
 
@@ -149,4 +149,4 @@ const Table = observer(() => {
   );
 });
 
-export default Table;
+export default VehiclesTable;
