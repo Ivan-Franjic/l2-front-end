@@ -1,15 +1,12 @@
-import { React, useState, useEffect } from "react";
+import { React, useEffect } from "react";
+import { observer } from "mobx-react";
 import { Link, useParams } from "react-router-dom";
-import {
-  editVehicle,
-  getVehicleDetails,
-} from "../../../Common/Services/VehiclesService";
+import { editVehicle } from "../../../Common/Services/VehiclesService";
 import VehiclesStore from "../../../Stores/VehiclesStore";
 import "./EditVehicle.css";
 
-export default function EditVehicle() {
+const EditVehicle = observer(() => {
   const { id } = useParams();
-  const [update, setUpdate] = useState(1);
 
   function Success() {
     document.getElementById("edit__formSubmitButton").disabled = true;
@@ -23,36 +20,19 @@ export default function EditVehicle() {
     document.getElementById("redirect").click();
   }
 
-  const [values, setValues] = useState({
-    vehiclemodel: "",
-    vehiclemake: "",
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setValues({
-      ...values,
-      [name]: value,
-    });
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    editVehicle(id, values.vehiclemodel, values.vehiclemake);
+    editVehicle(
+      id,
+      VehiclesStore.valuesEditVehicle.vehiclemodel,
+      VehiclesStore.valuesEditVehicle.vehiclemake
+    );
     Success();
   };
 
   useEffect(() => {
-    getVehicleDetails(id).then((data) => {
-      handleExistingValues(data);
-    });
+    VehiclesStore.handleExistingValues(id);
   }, []);
-
-  const handleExistingValues = (data) => {
-    values.vehiclemake = data.makeid;
-    values.vehiclemodel = data.name;
-    setUpdate(update + 1);
-  };
 
   return (
     <>
@@ -64,8 +44,9 @@ export default function EditVehicle() {
               className="select"
               id="vehiclemake"
               name="vehiclemake"
-              value={values.vehiclemake}
-              onChange={handleChange}
+              value={VehiclesStore.valuesEditVehicle.vehiclemake}
+              onChange={VehiclesStore.handleChangeEditVehicle}
+              required
             >
               {VehiclesStore.vehiclemakes.map((item, index) => (
                 <option key={index} value={item.id}>
@@ -78,8 +59,8 @@ export default function EditVehicle() {
               type="text"
               id="vehiclemodel"
               name="vehiclemodel"
-              value={values.vehiclemodel}
-              onChange={handleChange}
+              value={VehiclesStore.valuesEditVehicle.vehiclemodel}
+              onChange={VehiclesStore.handleChangeEditVehicle}
               required
             />
             <Link id="redirect" to="/" />
@@ -105,4 +86,6 @@ export default function EditVehicle() {
       </div>
     </>
   );
-}
+});
+
+export default EditVehicle;

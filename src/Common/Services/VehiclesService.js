@@ -21,11 +21,9 @@ export const getVehicleModels = async () => {
   return vehiclemodels.item;
 };
 
-export const deleteVehicle = (id) => {
-  fetch(url_vehiclemodels + id, {
-    method: "DELETE",
-    heders: { "Content-Type": "application/json" },
-  });
+export const getVehicleDetails = async (id) => {
+  const response = await fetch(url_vehiclemodels + id, requestOptions);
+  return await response.json();
 };
 
 export const createVehicle = (name, makeid) => {
@@ -36,16 +34,17 @@ export const createVehicle = (name, makeid) => {
   });
 };
 
-export const getVehicleDetails = (id) => {
-  return fetch(url_vehiclemodels + id, requestOptions).then((response) =>
-    response.json()
-  );
-};
-
 export const editVehicle = (id, name, makeid) => {
   fetch(url_vehiclemodels + id, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ id: id, name: name, makeid: makeid }),
+  });
+};
+
+export const deleteVehicle = (id) => {
+  fetch(url_vehiclemodels + id, {
+    method: "DELETE",
+    heders: { "Content-Type": "application/json" },
   });
 };

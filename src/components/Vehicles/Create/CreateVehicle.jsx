@@ -4,7 +4,7 @@ import { createVehicle } from "../../../Common/Services/VehiclesService";
 import VehiclesStore from "../../../Stores/VehiclesStore";
 import "./CreateVehicle.css";
 
-export default function EditVehicle() {
+const CreateVehicle = () => {
   function Success() {
     document.getElementById("create__formSubmitButton").disabled = true;
     setTimeout(() => {
@@ -39,6 +39,9 @@ export default function EditVehicle() {
               onChange={VehiclesStore.handleChangeCreateVehicle}
               required
             >
+              {!VehiclesStore.vehiclemakes.id && (
+                <option value="">Vehicle make:</option>
+              )}
               {VehiclesStore.vehiclemakes.map((item, index) => (
                 <option key={index} value={item.id}>
                   {item.name}
@@ -76,4 +79,6 @@ export default function EditVehicle() {
       </div>
     </>
   );
-}
+};
+
+export default CreateVehicle;

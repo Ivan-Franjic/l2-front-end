@@ -1,4 +1,4 @@
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable, runInAction } from "mobx";
 import {
   getVehicleDetails,
   getVehicleMakes,
@@ -11,15 +11,13 @@ class VehiclesStore {
   vehiclemakes = [];
   vehiclemodels = [];
   vehicles = [];
-  // sort = { order: "asc", orderBy: "id" };
+  valuesCreateVehicle = { vehiclemodel: "", vehiclemake: "" };
+  valuesEditVehicle = { vehiclemodel: "", vehiclemake: "" };
+  update = 1;
   columns = [
     { accessor: "name", label: "Name" },
     { accessor: "model", label: "Model" },
   ];
-
-  valuesCreateVehicle = { vehiclemodel: "", vehiclemake: "" };
-  // valuesEditVehicle = { vehiclemodel: "", vehiclemake: "" };
-  // update = 1;
 
   constructor() {
     makeAutoObservable(this);
@@ -55,16 +53,22 @@ class VehiclesStore {
     });
   };
 
-  // handleChangeEditVehicle = (e) => {
-  //   const { name, value } = e.target;
-  //   this.setValuesEditVehicle({
-  //     ...this.valuesEditVehicle,
-  //     [name]: value,
-  //   });
-  // };
+  handleChangeEditVehicle = (e) => {
+    const { name, value } = e.target;
+    this.setValuesEditVehicle({
+      ...this.valuesEditVehicle,
+      [name]: value,
+    });
+  };
 
-  setVehicles = (vehicles) => {
-    this.vehicles = vehicles;
+  handleExistingValues = (id) => {
+    getVehicleDetails(id).then((data) => {
+      runInAction(() => {
+        this.valuesEditVehicle.vehiclemake = data.makeid;
+        this.valuesEditVehicle.vehiclemodel = data.name;
+        this.setUpdate(this.update + 1);
+      });
+    });
   };
 
   setActivePage = (activePage) => {
@@ -75,21 +79,21 @@ class VehiclesStore {
     this.rowsPerPage = rowsPerPage;
   };
 
-  // setSort = (sort) => {
-  //   this.sort = sort;
-  // };
-
-  // setUpdate = (update) => {
-  //   this.update = update;
-  // };
+  setVehicles = (vehicles) => {
+    this.vehicles = vehicles;
+  };
 
   setValuesCreateVehicle = (valuesCreateVehicle) => {
     this.valuesCreateVehicle = valuesCreateVehicle;
   };
 
-  // setValuesEditVehicle = (valuesEditVehicle) => {
-  //   this.valuesEditVehicle = valuesEditVehicle;
-  // };
+  setValuesEditVehicle = (valuesEditVehicle) => {
+    this.valuesEditVehicle = valuesEditVehicle;
+  };
+
+  setUpdate = (update) => {
+    this.update = update;
+  };
 }
 
 export default new VehiclesStore();
