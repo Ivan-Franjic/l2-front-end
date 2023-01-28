@@ -1,6 +1,9 @@
 import { React, useState, useEffect } from "react";
-import useEditForm from "./useEditForm";
 import { Link, useParams } from "react-router-dom";
+import {
+  editVehicle,
+  getVehicleDetails,
+} from "../../../Common/Services/VehiclesService";
 import VehiclesStore from "../../../Stores/VehiclesStore";
 import "./EditVehicle.css";
 
@@ -20,24 +23,30 @@ export default function EditVehicle() {
     document.getElementById("redirect").click();
   }
 
-  const myHeaders = new Headers();
-  myHeaders.append("Content-Type", "application/json");
+  const [values, setValues] = useState({
+    vehiclemodel: "",
+    vehiclemake: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setValues({
+      ...values,
+      [name]: value,
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    editVehicle(id, values.vehiclemodel, values.vehiclemake);
+    Success();
+  };
 
   useEffect(() => {
-    fetch(
-      "https://api.baasic.com/beta/l2-front-end/resources/VehicleModel/" + id,
-      {
-        method: "GET",
-        headers: myHeaders,
-      }
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        handleExistingValues(data);
-      });
+    getVehicleDetails(id).then((data) => {
+      handleExistingValues(data);
+    });
   }, []);
-
-  const { handleChange, values, handleSubmit } = useEditForm(id, Success);
 
   const handleExistingValues = (data) => {
     values.vehiclemake = data.makeid;

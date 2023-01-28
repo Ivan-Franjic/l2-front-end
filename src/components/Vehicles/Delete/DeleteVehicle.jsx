@@ -1,6 +1,6 @@
 import React from "react";
-import useDeleteForm from "./useDeleteForm";
 import { Link, useParams } from "react-router-dom";
+import { deleteVehicle } from "../../../Common/Services/VehiclesService";
 import "./DeleteVehicle.css";
 
 export default function DeleteVehicle() {
@@ -18,7 +18,11 @@ export default function DeleteVehicle() {
     document.getElementById("redirect").click();
   }
 
-  const { handleSubmit } = useDeleteForm(id, Success);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    deleteVehicle(id);
+    Success();
+  };
 
   return (
     <>

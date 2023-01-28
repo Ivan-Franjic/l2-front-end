@@ -1,6 +1,6 @@
 import React from "react";
-import useCreateForm from "./useCreateForm";
 import { Link } from "react-router-dom";
+import { createVehicle } from "../../../Common/Services/VehiclesService";
 import VehiclesStore from "../../../Stores/VehiclesStore";
 import "./CreateVehicle.css";
 
@@ -17,7 +17,14 @@ export default function EditVehicle() {
     document.getElementById("redirect").click();
   }
 
-  const { handleChange, handleSubmit } = useCreateForm(Success);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    createVehicle(
+      VehiclesStore.valuesCreateVehicle.vehiclemodel,
+      VehiclesStore.valuesCreateVehicle.vehiclemake
+    );
+    Success();
+  };
 
   return (
     <>
@@ -29,7 +36,7 @@ export default function EditVehicle() {
               className="select"
               id="vehiclemake"
               name="vehiclemake"
-              onChange={handleChange}
+              onChange={VehiclesStore.handleChangeCreateVehicle}
               required
             >
               {VehiclesStore.vehiclemakes.map((item, index) => (
@@ -43,7 +50,7 @@ export default function EditVehicle() {
               type="text"
               id="vehiclemodel"
               name="vehiclemodel"
-              onChange={handleChange}
+              onChange={VehiclesStore.handleChangeCreateVehicle}
               required
             />
             <Link id="redirect" to="/" />
