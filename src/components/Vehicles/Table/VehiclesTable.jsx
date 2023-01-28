@@ -1,63 +1,39 @@
 import React, { useEffect, useState, useMemo } from "react";
-import { sortRows, filterRows, paginateRows } from "./helpers";
+import { sortRows, filterRows, paginateRows } from "../../../Common/helpers";
 import { observer } from "mobx-react";
-import "./Table.css";
+import VehiclesStore from "../../../Stores/VehiclesStore";
+import TableFooter from "./TableFooter";
 import { MdEdit } from "react-icons/md";
 import { BsFillTrashFill } from "react-icons/bs";
-import { AiOutlinePlus } from "react-icons/ai";
-import TableFooter from "./TableFooter";
-import TableStore from "../../../Stores/TableStore";
-import VehiclesStore from "../../../Stores/VehiclesStore";
+import "./VehiclesTable.css";
+
 import { Link } from "react-router-dom";
 
-const Table = ({ data }) => {
-  const [activePage, setActivePage] = useState(1);
-  const columns = [
-    { accessor: "name", label: "Name" },
-    { accessor: "model", label: "Model" },
-  ];
+const Table = observer(() => {
   const [filters, setFilters] = useState({});
   const [sort, setSort] = useState({ order: "asc", orderBy: "id" });
-  const rowsPerPage = 4;
 
   const filteredRows = useMemo(
-    () => filterRows(data, filters),
-    [data, filters]
+    () => filterRows(VehiclesStore.vehicles, filters),
+    [VehiclesStore.vehicles, filters]
   );
+
   const sortedRows = useMemo(
     () => sortRows(filteredRows, sort),
     [filteredRows, sort]
   );
-  const calculatedRows = paginateRows(sortedRows, activePage, rowsPerPage);
+
+  const calculatedRows = paginateRows(
+    sortedRows,
+    VehiclesStore.activePage,
+    VehiclesStore.rowsPerPage
+  );
+
   const count = filteredRows.length;
-  const totalPages = Math.ceil(count / rowsPerPage);
-  const myHeaders = new Headers();
-  myHeaders.append("Content-Type", "application/json");
-  const requestOptions = {
-    method: "GET",
-    heders: myHeaders,
-  };
-
-  const url_vehiclemakes =
-    "https://api.baasic.com/beta/l2-front-end/resources/VehicleMake?limit=100";
-
-  const url_vehiclemodels =
-    "https://api.baasic.com/beta/l2-front-end/resources/VehicleModel?limit=100";
-
-  const getVehicleMakes = async () => {
-    const res_vehiclemakes = await fetch(url_vehiclemakes, requestOptions);
-    const vehiclemakes = await res_vehiclemakes.json();
-    VehiclesStore.setVehicleMakes(vehiclemakes.item);
-  };
-
-  const getVehicleModels = async () => {
-    const res_vehiclemodels = await fetch(url_vehiclemodels, requestOptions);
-    const vehiclemodels = await res_vehiclemodels.json();
-    VehiclesStore.setVehicleModels(vehiclemodels.item);
-  };
+  const totalPages = Math.ceil(count / VehiclesStore.rowsPerPage);
 
   const handleSort = (accessor) => {
-    setActivePage(1);
+    VehiclesStore.setActivePage(1);
     setSort((prevSort) => ({
       order:
         prevSort.order === "asc" && prevSort.orderBy === accessor
@@ -66,9 +42,9 @@ const Table = ({ data }) => {
       orderBy: accessor,
     }));
   };
-  const handleSearch = (value, accessor) => {
-    setActivePage(1);
 
+  const handleSearch = (value, accessor) => {
+    VehiclesStore.setActivePage(1);
     if (value) {
       setFilters((prevFilters) => ({
         ...prevFilters,
@@ -84,35 +60,12 @@ const Table = ({ data }) => {
     }
   };
 
-  const createVehiclesArray = () => {
-    const vehiclesArray = [];
-    VehiclesStore.vehiclemodels.map((s1) => {
-      vehiclesArray.push({
-        id: s1.id,
-        name: VehiclesStore.vehiclemakes.find(
-          (s2) => s2.id.toString() === s1.makeid
-        ).name,
-        model: s1.name,
-      });
-    });
-    VehiclesStore.setVehicles(vehiclesArray);
-  };
-
   useEffect(() => {
-    getVehicleMakes();
-    getVehicleModels();
-    createVehiclesArray();
+    VehiclesStore.getVehiclesData();
   }, []);
 
   return (
     <>
-      {/* <input
-        type="search"
-        placeholder={`Search`}
-        value={filters[column.accessor]}
-        onChange={(event) => handleSearch(event.target.value, column.accessor)}
-      /> */}
-
       <Link to={"/vehicles/create"}>
         <button className="addVehicleButton">+ Add vehicle</button>
       </Link>
@@ -121,7 +74,7 @@ const Table = ({ data }) => {
         <thead className="table__header">
           <tr>
             <th className="table__headerRow">#</th>
-            {columns.map((column) => {
+            {VehiclesStore.columns.map((column) => {
               const sortIcon = () => {
                 if (column.accessor === sort.orderBy) {
                   if (sort.order === "asc") {
@@ -143,6 +96,24 @@ const Table = ({ data }) => {
             })}
             <th className="table__headerRow">Edit</th>
             <th className="table__headerRow">Delete</th>
+          </tr>
+          <tr>
+            <th></th>
+            {VehiclesStore.columns.map((column) => {
+              return (
+                <th>
+                  <input
+                    key={`${column.accessor}-search`}
+                    type="search"
+                    placeholder={`Filter by ${column.label.toLowerCase()}`}
+                    value={filters[column.accessor]}
+                    onChange={(event) =>
+                      handleSearch(event.target.value, column.accessor)
+                    }
+                  />
+                </th>
+              );
+            })}
           </tr>
         </thead>
         <tbody>
@@ -168,14 +139,14 @@ const Table = ({ data }) => {
         </tbody>
       </table>
       <TableFooter
-        activePage={activePage}
+        activePage={VehiclesStore.activePage}
         count={count}
-        rowsPerPage={rowsPerPage}
+        rowsPerPage={VehiclesStore.rowsPerPage}
         totalPages={totalPages}
-        setActivePage={setActivePage}
+        setActivePage={VehiclesStore.setActivePage}
       />
     </>
   );
-};
+});
 
 export default Table;

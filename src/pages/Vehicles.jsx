@@ -1,19 +1,17 @@
 import React from "react";
-import Table from "../Components/Vehicles/Table/Table";
-import VehiclesStore from "../Stores/VehiclesStore";
-import { observer } from "mobx-react";
+import VehiclesTable from "../Components/Vehicles/Table/VehiclesTable";
 import "./Vehicles.css";
 
-const Vehicles = observer(() => {
+const Vehicles = () => {
   return (
     <>
       <main className="container">
         <div className="wrapper">
-          <Table data={VehiclesStore.vehicles} />
+          <VehiclesTable />
         </div>
       </main>
     </>
   );
-});
+};
 
 export default Vehicles;
