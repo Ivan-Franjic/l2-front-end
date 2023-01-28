@@ -14,10 +14,6 @@ export function isNil(value) {
   return typeof value === "undefined" || value === null;
 }
 
-export function convertDateString(value) {
-  return value.substr(6, 4) + value.substr(3, 2) + value.substr(0, 2);
-}
-
 export function toLower(value) {
   if (isString(value)) {
     return value.toLowerCase();
